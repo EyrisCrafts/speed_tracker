@@ -1,10 +1,28 @@
+import 'dart:math';
+
 import 'package:geolocator/geolocator.dart' as dev;
-import 'dart:developer';
+import 'dart:developer' as dev;
+
+import 'package:intl/intl.dart';
 
 class Utils {
+  static String translateDate(String number) {
+    DateFormat format = DateFormat('hh:mm:ss   dd:MM:yyyy');
+    return format.format(DateTime.fromMillisecondsSinceEpoch(
+        int.parse(number.substring(5).replaceAll('.txt', ''))));
+  }
+
+  static String generateRandomString(int len) {
+    var r = Random();
+    const _chars =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    return List.generate(len, (index) => _chars[r.nextInt(_chars.length)])
+        .join();
+  }
+
   static bool speedLimitCrossed(double speedLimit, double distance,
       DateTime startingTime, DateTime currentTime) {
-    log("Distance covered is $distance in meters");
+    dev.log("Distance covered is $distance in meters");
     //Find the minimum time to cross
     //Distance in m
     double trueDistance = distance / 1000;

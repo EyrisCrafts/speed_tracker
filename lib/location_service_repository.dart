@@ -4,11 +4,14 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:background_locator/location_dto.dart';
+import 'package:background_locator_example/Global.dart';
 import 'package:background_locator_example/MLocation.dart';
 import 'package:background_locator_example/ProviderPrefs.dart';
+import 'package:background_locator_example/Providers/ProviderFiles.dart';
 import 'package:background_locator_example/Utils.dart';
 import 'dart:developer' as dev;
 import 'file_manager.dart';
+import 'Models/CarSpeed.dart';
 
 class LocationServiceRepository {
   static LocationServiceRepository _instance = LocationServiceRepository._();
@@ -40,7 +43,7 @@ class LocationServiceRepository {
       _count = 0;
     }
     print("$_count");
-    await setLogLabel("start");
+    // await setLogLabel("start");
     final SendPort send = IsolateNameServer.lookupPortByName(isolateName);
     send?.send(null);
   }
@@ -48,7 +51,7 @@ class LocationServiceRepository {
   Future<void> dispose() async {
     print("***********Dispose callback handler");
     print("$_count");
-    await setLogLabel("end");
+    // await setLogLabel("end");
     final SendPort send = IsolateNameServer.lookupPortByName(isolateName);
     send?.send(null);
   }
@@ -61,11 +64,11 @@ class LocationServiceRepository {
     _count++;
   }
 
-  static Future<void> setLogLabel(String label) async {
-    final date = DateTime.now();
-    await FileManager.writeToLogFile(
-        '------------\n$label: ${formatDateLog(date)}\n------------\n');
-  }
+  // static Future<void> setLogLabel(String label) async {
+  //   final date = DateTime.now();
+  //   await FileManager.writeToLogFile(
+  //       '------------\n$label: ${formatDateLog(date)}\n------------\n');
+  // }
 
   static Future<void> setLogPosition(int count, LocationDto data) async {
     final date = DateTime.now();
@@ -75,8 +78,13 @@ class LocationServiceRepository {
         lon: data.longitude,
         time: date.millisecondsSinceEpoch.toString()));
     dev.log("The current speed saved");
-    await FileManager.writeToLogFile(
-        '$count : ${formatDateLog(date)} --> ${formatLog(data)}\n');
+    // await ProviderFiles.writeToLogFile(
+    //     CarSpeed(
+    //         lat: data.latitude,
+    //         lon: data.longitude,
+    //         time: date.millisecondsSinceEpoch.toString(),
+    //         speed: data.speed),
+    //     Global.logName);
   }
 
   static double dp(double val, int places) {
